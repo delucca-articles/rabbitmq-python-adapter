@@ -1,0 +1,4 @@
+{
+  "tests/test_instance.py::test_rabbitmq_factory": true,
+  "tests/test_main.py::test_rabbitmq_factory": true
+}
