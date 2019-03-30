@@ -1,2 +1,5 @@
 pytest
+pytest-env
 pika
+pyyaml
+dotmap
