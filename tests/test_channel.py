@@ -12,10 +12,9 @@ from config import *
 def test_channel_sets_parameters(monkeypatch):
     mocked_pika = Mock()
     mocked_pika.URLParameters.return_value = 'MORTY'
-    mocked_pika.BlockingConnection.return_value = pika.Connection()
     monkeypatch.setattr('rabbitmq_adapter.channel.pika', mocked_pika)
 
-    Channel = rabbitmq_adapter.channel.create('MORTY HOST')
+    rabbitmq_adapter.channel.create('MORTY HOST')
 
     mocked_pika.URLParameters.assert_called_once_with('MORTY HOST')
 
@@ -26,12 +25,12 @@ def test_channel_creates_connection(monkeypatch):
     mocked_pika.BlockingConnection.return_value = pika.Connection()
     monkeypatch.setattr('rabbitmq_adapter.channel.pika', mocked_pika)
 
-    Channel = rabbitmq_adapter.channel.create('MORTY HOST')
+    rabbitmq_adapter.channel.create('MORTY HOST')
 
     mocked_pika.BlockingConnection.assert_called_once_with('MORTY')
 
 @pytest.mark.integration
-def test_channel(monkeypatch):
+def test_channel():
     Channel = rabbitmq_adapter.channel.create(config.rabbitmq.host)
 
     assert 'exchange_declare' in dir(Channel)
