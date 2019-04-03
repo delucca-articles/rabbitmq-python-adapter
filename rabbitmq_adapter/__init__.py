@@ -1,0 +1,1 @@
+import rabbitmq_adapter.channel
