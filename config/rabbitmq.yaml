@@ -1,2 +1,6 @@
 test:
   host: 'amqp://avsucqru:tOUTQJ_DDYG_OLW4cmeFxk5MqUhBEfDD@woodpecker.rmq.cloudamqp.com/avsucqru'
+  exchange: 'amq.direct'
+  queue: 'TEST::NEW'
+  prefetch:
+    count: 1
