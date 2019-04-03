@@ -28,15 +28,3 @@ def test_channel_creates_connection(monkeypatch):
     rabbitmq_adapter.channel.create('MORTY HOST')
 
     mocked_pika.BlockingConnection.assert_called_once_with('MORTY')
-
-@pytest.mark.integration
-def test_channel():
-    Channel = rabbitmq_adapter.channel.create(config.rabbitmq.host)
-
-    assert 'exchange_declare' in dir(Channel)
-    assert 'queue_declare'   in dir(Channel)
-    assert 'queue_bind' in dir(Channel)
-    assert 'basic_qos' in dir(Channel)
-    assert 'basic_consume' in dir(Channel)
-    assert 'start_consuming' in dir(Channel)
-    assert 'basic_publish' in dir(Channel)

@@ -8,6 +8,8 @@ from tests.__mocks__ import pika
 sys.path.append(os.environ['CONFIG'])
 from config import *
 
+def mocked_handler(): pass
+
 @pytest.mark.unit
 def test_subscriber_queue_declared(monkeypatch):
     channel = pika.Channel()
@@ -45,7 +47,6 @@ def test_subscriber_basic_qos(monkeypatch):
 def test_subscriber_basic_consume(monkeypatch):
     channel = pika.Channel()
     channel.basic_consume = Mock()
-    def mocked_handler(): pass
 
     rabbitmq_adapter.subscriber.subscribe(channel, mocked_handler)
 
@@ -53,13 +54,3 @@ def test_subscriber_basic_consume(monkeypatch):
         queue=config.rabbitmq.queue,
         on_message_callback=mocked_handler
     )
-
-@pytest.mark.only
-def test_subscriber_subscribe(monkeypatch):
-    Channel = rabbitmq_adapter.channel.create(config.rabbitmq.host)
-    def mocked_handler(): pass
-
-    rabbitmq_adapter.subscriber.subscribe(Channel, mocked_handler, durable=False)
-    print(Channel.connection)
-
-    assert False
