@@ -11,7 +11,7 @@ from config import *
 def mocked_handler(): pass
 
 @pytest.mark.unit
-def test_listener_queue_declared(monkeypatch):
+def test_listener_subscribe_queue_declared(monkeypatch):
     channel = pika.Channel()
     channel.queue_declare = Mock()
 
@@ -23,7 +23,7 @@ def test_listener_queue_declared(monkeypatch):
     )
 
 @pytest.mark.unit
-def test_listener_queue_bind(monkeypatch):
+def test_listener_subscribe_queue_bind(monkeypatch):
     channel = pika.Channel()
     channel.queue_bind = Mock()
 
@@ -35,7 +35,7 @@ def test_listener_queue_bind(monkeypatch):
     )
 
 @pytest.mark.unit
-def test_listener_basic_qos(monkeypatch):
+def test_listener_subscribe_basic_qos(monkeypatch):
     channel = pika.Channel()
     channel.basic_qos = Mock()
 
@@ -44,7 +44,7 @@ def test_listener_basic_qos(monkeypatch):
     channel.basic_qos.assert_called_once_with(prefetch_count=config.rabbitmq.prefetch.count)
 
 @pytest.mark.unit
-def test_listener_basic_consume(monkeypatch):
+def test_listener_subscribe_basic_consume(monkeypatch):
     channel = pika.Channel()
     channel.basic_consume = Mock()
 
