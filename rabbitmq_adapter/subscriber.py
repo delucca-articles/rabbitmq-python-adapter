@@ -8,7 +8,7 @@ def subscribe(
     channel,
     handler,
     queue=config.rabbitmq.queue,
-    durable=True,
+    durable=config.rabbitmq.durable,
     exchange=config.rabbitmq.exchange,
     prefetch_count=config.rabbitmq.prefetch.count
 ):
