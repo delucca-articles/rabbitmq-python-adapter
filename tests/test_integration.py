@@ -24,18 +24,21 @@ def setup_listener(
 
 def wait_for_result(
     anchor,
+    expected,
     tries=0,
     retry_after=.6
 ):
-    if len(anchor) > 0 or tries > 5: assert len(anchor) > 0
+    if anchor == expected or tries > 5: assert anchor == expected
     else:
         sleep(retry_after)
-        return wait_for_result(anchor, tries + 1)
+        return wait_for_result(anchor, expected, tries + 1)
 
 @pytest.mark.integration
 def test_rabbitmq_factory():
     # Should be able to create a RabbitMQ connection
     calls = []
+    expected = [1]
+
     def mocked_handler(ch, method, props, body):
         calls.append(1)
         ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -50,13 +53,15 @@ def test_rabbitmq_factory():
     )
 
     rabbitmq_channel.start_consuming()
-    wait_for_result(calls)
+    wait_for_result(calls, expected)
 
 @pytest.mark.integration
 def test_rabbitmq_listen_to_queue():
     # Should be able to listen to a RabbitMQ queue
     calls = []
+    expected = [1]
     rabbitmq_channel = rabbitmq_adapter.channel.create(config.rabbitmq.host)
+
     def mocked_handler(ch, method, props, body):
         calls.append(1)
         ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -70,11 +75,36 @@ def test_rabbitmq_listen_to_queue():
     )
 
     rabbitmq_channel.start_consuming()
-    wait_for_result(calls)
+    wait_for_result(calls, expected)
 
+@pytest.mark.integration
 def test_rabbitmq_queue_one_to_many_queue_handler():
     # Should be able to have an one-to-many relationship between the queue and the handler function
-    assert True
+    calls = []
+    expected = [1, 1]
+    second_queue = 'TEST::NEW_2'
+    rabbitmq_channel = rabbitmq_adapter.channel.create(config.rabbitmq.host)
+
+    def mocked_handler(ch, method, props, body):
+        calls.append(1)
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        if calls == expected: ch.close()
+
+    rabbitmq_adapter.subscriber.subscribe(rabbitmq_channel, mocked_handler, durable=False)
+    rabbitmq_adapter.subscriber.subscribe(rabbitmq_channel, mocked_handler, durable=False, queue=second_queue)
+    rabbitmq_channel.basic_publish(
+        exchange=config.rabbitmq.exchange,
+        routing_key=config.rabbitmq.queue,
+        body='MORTY'
+    )
+    rabbitmq_channel.basic_publish(
+        exchange=config.rabbitmq.exchange,
+        routing_key=second_queue,
+        body='MORTY'
+    )
+
+    rabbitmq_channel.start_consuming()
+    wait_for_result(calls, expected)
 
 def test_rabbitmq_send_message():
     # Should be able to send a message in a given queue
