@@ -106,6 +106,20 @@ def test_rabbitmq_queue_one_to_many_queue_handler():
     rabbitmq_channel.start_consuming()
     wait_for_result(calls, expected)
 
+@pytest.mark.integration
 def test_rabbitmq_send_message():
     # Should be able to send a message in a given queue
-    assert True
+    calls = []
+    expected = ['MORTY']
+    rabbitmq_channel = rabbitmq_adapter.channel.create(config.rabbitmq.host)
+
+    def mocked_handler(ch, method, props, body):
+        calls.append(body.decode('utf-8'))
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        ch.close()
+
+    rabbitmq_adapter.listener.subscribe(rabbitmq_channel, mocked_handler, durable=False)
+    rabbitmq_adapter.sender.publish(rabbitmq_channel, 'MORTY')
+
+    rabbitmq_channel.start_consuming()
+    wait_for_result(calls, expected)

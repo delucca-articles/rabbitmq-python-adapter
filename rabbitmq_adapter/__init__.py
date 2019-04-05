@@ -1,2 +1,3 @@
 import rabbitmq_adapter.channel
 import rabbitmq_adapter.listener
+import rabbitmq_adapter.sender
