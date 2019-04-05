@@ -67,7 +67,7 @@ def test_rabbitmq_listen_to_queue():
         ch.basic_ack(delivery_tag=method.delivery_tag)
         ch.close()
 
-    rabbitmq_adapter.subscriber.subscribe(rabbitmq_channel, mocked_handler, durable=False)
+    rabbitmq_adapter.listener.subscribe(rabbitmq_channel, mocked_handler, durable=False)
     rabbitmq_channel.basic_publish(
         exchange=config.rabbitmq.exchange,
         routing_key=config.rabbitmq.queue,
@@ -90,8 +90,8 @@ def test_rabbitmq_queue_one_to_many_queue_handler():
         ch.basic_ack(delivery_tag=method.delivery_tag)
         if calls == expected: ch.close()
 
-    rabbitmq_adapter.subscriber.subscribe(rabbitmq_channel, mocked_handler, durable=False)
-    rabbitmq_adapter.subscriber.subscribe(rabbitmq_channel, mocked_handler, durable=False, queue=second_queue)
+    rabbitmq_adapter.listener.subscribe(rabbitmq_channel, mocked_handler, durable=False)
+    rabbitmq_adapter.listener.subscribe(rabbitmq_channel, mocked_handler, durable=False, queue=second_queue)
     rabbitmq_channel.basic_publish(
         exchange=config.rabbitmq.exchange,
         routing_key=config.rabbitmq.queue,

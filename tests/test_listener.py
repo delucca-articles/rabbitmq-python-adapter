@@ -11,11 +11,11 @@ from config import *
 def mocked_handler(): pass
 
 @pytest.mark.unit
-def test_subscriber_queue_declared(monkeypatch):
+def test_listener_queue_declared(monkeypatch):
     channel = pika.Channel()
     channel.queue_declare = Mock()
 
-    rabbitmq_adapter.subscriber.subscribe(channel, mocked_handler)
+    rabbitmq_adapter.listener.subscribe(channel, mocked_handler)
 
     channel.queue_declare.assert_called_once_with(
         queue=config.rabbitmq.queue,
@@ -23,11 +23,11 @@ def test_subscriber_queue_declared(monkeypatch):
     )
 
 @pytest.mark.unit
-def test_subscriber_queue_bind(monkeypatch):
+def test_listener_queue_bind(monkeypatch):
     channel = pika.Channel()
     channel.queue_bind = Mock()
 
-    rabbitmq_adapter.subscriber.subscribe(channel, mocked_handler)
+    rabbitmq_adapter.listener.subscribe(channel, mocked_handler)
 
     channel.queue_bind.assert_called_once_with(
         queue=config.rabbitmq.queue,
@@ -35,20 +35,20 @@ def test_subscriber_queue_bind(monkeypatch):
     )
 
 @pytest.mark.unit
-def test_subscriber_basic_qos(monkeypatch):
+def test_listener_basic_qos(monkeypatch):
     channel = pika.Channel()
     channel.basic_qos = Mock()
 
-    rabbitmq_adapter.subscriber.subscribe(channel, mocked_handler)
+    rabbitmq_adapter.listener.subscribe(channel, mocked_handler)
 
     channel.basic_qos.assert_called_once_with(prefetch_count=config.rabbitmq.prefetch.count)
 
 @pytest.mark.unit
-def test_subscriber_basic_consume(monkeypatch):
+def test_listener_basic_consume(monkeypatch):
     channel = pika.Channel()
     channel.basic_consume = Mock()
 
-    rabbitmq_adapter.subscriber.subscribe(channel, mocked_handler)
+    rabbitmq_adapter.listener.subscribe(channel, mocked_handler)
 
     channel.basic_consume.assert_called_once_with(
         queue=config.rabbitmq.queue,
