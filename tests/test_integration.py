@@ -118,7 +118,7 @@ def test_rabbitmq_send_message():
         ch.basic_ack(delivery_tag=method.delivery_tag)
         ch.close()
 
-    rabbitmq_adapter.listener.subscribe(rabbitmq_channel, mocked_handler, durable=False)
+    rabbitmq_channel = setup_listener(rabbitmq_channel, mocked_handler)
     rabbitmq_adapter.sender.publish(rabbitmq_channel, 'MORTY')
 
     rabbitmq_channel.start_consuming()
