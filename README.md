@@ -1,6 +1,6 @@
 # RabbitMQ Python Adapter
 
-This repository was created to provide the code samples on the [Recommendation Algorithm Using Python and RabbitMQ (Part 2): Connecting with RabbitMQ](https://medium.com/@odelucca/recommendation-algorithm-using-python-and-rabbitmq-part-2-connecting-with-rabbitmq-aa0ec933e195). This module's goal is to make it easier to connect, send and receive messages to a RabbitMQ server. The idea is to handle all complex use cases of a simple RabbitMQ connection and return just a simple object which you can use to interact with your AMQP server.
+This repository was created to provide the code samples on the [Recommendation Algorithm Using Python and RabbitMQ (Part 2): Connecting with RabbitMQ](https://medium.com/@odelucca/recommendation-algorithm-using-python-and-rabbitmq-part-2-connecting-with-rabbitmq-aa0ec933e195) article. This module's goal is to make it easier to connect, send and receive messages to a RabbitMQ server. The idea is to handle all complex use cases of a simple RabbitMQ connection and return just a simple object which you can use to interact with your AMQP server.
 
 ## 🧐 What's inside
 
